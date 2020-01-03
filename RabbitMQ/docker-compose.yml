@@ -1,0 +1,55 @@
+version: "3"
+
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3
+
+  mqserver:
+    container_name: mqserver
+    build:
+      context: .
+      dockerfile: DockerServidor
+    command:
+      python3 -u server.py
+    volumes:
+      - ./historial:/server/log
+    depends_on:
+      - rabbitmq
+
+
+
+
+  client:
+    container_name: mqclient
+    build:
+      context: .
+      dockerfile: DockerCliente
+    command:
+      tail -F /dev/null
+
+
+
+  client_1:
+    container_name: mqclient_1
+    build:
+      context: .
+      dockerfile: DockerCliente
+    command:
+      python3 -u client.py a
+    depends_on:
+      - rabbitmq
+
+
+
+  client_2:
+    container_name: mqclient_2
+    build:
+      context: .
+      dockerfile: DockerCliente
+    command:
+      python3 -u client.py b
+    depends_on:
+      - rabbitmq
+

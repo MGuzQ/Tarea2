@@ -1,0 +1,21 @@
+
+# Same thing than the 'server' Dockerfile.
+FROM ubuntu:latest
+RUN mkdir -p client 
+WORKDIR /client
+
+RUN apt-get update\
+    && apt-get -y install python3 \
+    && apt-get -y install nano \
+    && apt-get -y install python3-pip \
+    && python3 -m pip install --upgrade pip \
+    &&  python3 -m pip install grpcio \
+    && python3 -m pip install grpcio-tools
+
+ADD client.py .
+ADD chat.proto .
+
+RUN python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. chat.proto
+
+ 
+

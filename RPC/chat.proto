@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package chatsito;
+
+message Usuario{
+	string id = 1;
+}
+
+message Mensaje {
+	string id_em = 1;
+	string id_re = 2;
+	string cuerpo = 3;
+	string timestamp = 4;
+}
+message Confirmacion{
+	string msg = 1;
+}
+
+
+message Empty{}
+
+
+service Broadcast {
+	rpc Enviar (stream Mensaje) returns (Confirmacion);
+	rpc Recibir (Usuario) returns (stream Mensaje);
+	rpc Conectar (Usuario) returns (Confirmacion);
+	rpc Conectados (Mensaje) returns (Mensaje);
+	rpc Enviados (Usuario) returns (stream Mensaje);
+	rpc Desconectar (Usuario) returns (Confirmacion);
+}
+//De esta forma se crean los archivos pb2 (tiene que estar en la carpeta example/protos del ejemplo git de la pagina 
+///y se debe ejecutar desde la carpeta example/python/carpetaque quieras que la contenga) :].
+//python -m grpc_tools.protoc -I../../protos --python_out=. --grpc_python_out=. ../../protos/chat.proto

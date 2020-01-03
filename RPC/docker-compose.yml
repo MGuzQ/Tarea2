@@ -1,0 +1,74 @@
+
+version: "3"
+
+#se definen los servicios
+services:
+
+  server:
+
+    container_name: server
+    #define donde se encuentra el dockerfile der servicio
+    build:
+      context: .
+      dockerfile: DockerServidor
+
+
+    command:
+      #tail -F /dev/null
+      python3 -u server.py
+
+    volumes:
+      - ./historial:/server/log
+
+
+
+  cliente:
+
+    container_name: cliente_1
+    build:
+      context: .
+      dockerfile: DockerCliente
+
+
+    command:
+      #bash -c "python3 -u client/client.py " #corre el cliente automaticamente
+      #tail -F /dev/null #deja al cliente corriendo por dentras docker exec -i -t "nombre_del_container" bash  para entrar a este
+      python3 -u client.py a
+    depends_on:
+      - server
+
+
+
+
+
+
+  cliente2:
+    container_name: cliente_2
+    build:
+      context: .
+      dockerfile: DockerCliente
+
+
+    command:
+      #bash -c "python3 -u client/client.py " #corre el cliente automaticamente
+      #tail -F /dev/null #deja al cliente corriendo por dentras docker exec -i -t "nombre_del_container" bash  para entrar a este
+      python3 -u client.py b
+    depends_on:
+      - server
+
+  client:
+
+    container_name: client
+    build:
+      context: .
+      dockerfile: DockerCliente
+
+
+    command:
+      #bash -c "python3 -u client/client.py " #corre el cliente automaticamente
+      tail -F /dev/null #deja al cliente corriendo por dentras docker exec -i -t "nombre_del_container" bash  para entrar a este
+      #python3 -u client.py a
+
+
+
+

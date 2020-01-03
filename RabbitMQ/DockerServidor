@@ -1,0 +1,19 @@
+FROM ubuntu:latest
+RUN mkdir -p server/log
+WORKDIR /server
+
+
+RUN apt-get update \
+    && apt-get install -y python3-pip python3-dev \
+    && cd /usr/local/bin \
+    && ln -s /usr/bin/python3 python3 \
+    && pip3 install --upgrade pip \
+    && apt-get -y install nano 
+
+
+
+RUN pip3 install -U pika
+
+ADD server.py .
+
+
